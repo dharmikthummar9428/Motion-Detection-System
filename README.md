@@ -4,8 +4,11 @@ This project implements a real-time motion detection system using Computer Visio
 
 # Features
 Real-time motion detection using webcam,
+
 Frame differencing for detecting movement,
+
 Noise reduction using Gaussian Blur,
+
 Bounding boxes drawn around detected motion
 
 
