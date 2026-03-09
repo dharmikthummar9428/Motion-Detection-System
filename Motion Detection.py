@@ -1,30 +1,26 @@
 import cv2
 
-# Start video capture (0 = webcam)
 cap = cv2.VideoCapture(0)
 
-# Read first frame
 ret, frame1 = cap.read()
 ret, frame2 = cap.read()
 
 while cap.isOpened():
 
-    # Find difference between frames
     diff = cv2.absdiff(frame1, frame2)
 
     # Convert to grayscale
     gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
 
-    # Apply Gaussian Blur
+    # Gaussian Blur
     blur = cv2.GaussianBlur(gray, (5,5), 0)
 
-    # Threshold to get motion areas
     _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
 
-    # Dilate to fill gaps
+    # fill gaps
     dilated = cv2.dilate(thresh, None, iterations=3)
 
-    # Find contours (moving objects)
+    # Find moving objects
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     motion_detected = False
@@ -45,10 +41,8 @@ while cap.isOpened():
         cv2.putText(frame1, "Motion Detected", (10,30),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
 
-    # Show frame
     cv2.imshow("Motion Detection", frame1)
 
-    # Update frames
     frame1 = frame2
     ret, frame2 = cap.read()
 
@@ -56,4 +50,5 @@ while cap.isOpened():
         break
 
 cap.release()
+
 cv2.destroyAllWindows()
